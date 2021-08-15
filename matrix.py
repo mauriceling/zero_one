@@ -29,7 +29,7 @@ def SUReporter(program=None, environment=None,
     print("Glitches = %s" % glitch)
     print("Architect Code IDs = %s" % architectCode)
     print("Architect Code Map = %s" % architectCodeMap)
-    rint("")
+    print("")
     return environment
 
 def SUProgramAdder(program=None, environment=None, 
