@@ -110,9 +110,10 @@ def SUMaintenance(programBag, environmentBag, architectCode,
 
 if __name__ == "__main__":
     exec("import %s as sim_architect" % sys.argv[1])
-    exec("import %s as sim_maintenance" % sys.argv[2])
+    try: exec("import %s as sim_maintenance" % sys.argv[2])
+    except IndexError: import maintenance as sim_maintenance
     try: timecycle = int(sys.argv[3])
-    except: timecycle = 1
+    except IndexError: timecycle = 1
     SUProgramAdder(SUArchitect, None)
     SUProgramAdder(SUReporter, None)
     # -----------------------------------------------------------------
