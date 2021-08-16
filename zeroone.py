@@ -78,11 +78,11 @@ def SUArchitect(program, environment, programBag=programBag,
     in the simulation.
     @returns: environment
     """
-    importlib.reload(simulation_architect)
-    for ID in [ID for ID in simulation_architect.archCode.keys() 
+    importlib.reload(sim_architect)
+    for ID in [ID for ID in sim_architect.archCode.keys() 
                if ID not in architectCode]:
-        environment = SUProgramAdder(simulation_architect.archCode[ID], 
-                                     simulation_architect.archEnv[ID])
+        environment = SUProgramAdder(sim_architect.archCode[ID], 
+                                     sim_architect.archEnv[ID])
         architectCode.append(ID)
         architectCodeMap[ID] = environment['newProgramID']
     return environment   
@@ -104,24 +104,15 @@ def SUMaintenance(programBag, environmentBag, architectCode,
     @returns: (programBag, environmentBag, architectCode, 
     architectCodeMap, glitch)
     """
-    importlib.reload(simulation_maintenance)
-    return simulation_maintenance.main(programBag, environmentBag,
+    importlib.reload(sim_maintenance)
+    return sim_maintenance.main(programBag, environmentBag,
         architectCode, architectCodeMap, glitch)
 
 if __name__ == "__main__":
-    timecycle = 1
-    if len(sys.argv) == 1:
-        import simulation_architect
-        import simulation_maintenance
-    elif len(sys.argv) == 2:
-        exec("import %s as simulation_architect" % sys.argv[1])
-    elif len(sys.argv) == 3:
-        exec("import %s as simulation_architect" % sys.argv[1])
-        exec("import %s as simulation_maintenance" % sys.argv[2])
-    elif len(sys.argv) == 4:
-        exec("import %s as simulation_architect" % sys.argv[1])
-        exec("import %s as simulation_maintenance" % sys.argv[2])
-        timecycle = int(sys.argv[3])
+    exec("import %s as sim_architect" % sys.argv[1])
+    exec("import %s as sim_maintenance" % sys.argv[2])
+    try: timecycle = int(sys.argv[3])
+    except: timecycle = 1
     SUProgramAdder(SUArchitect, None)
     SUProgramAdder(SUReporter, None)
     # -----------------------------------------------------------------
@@ -135,11 +126,11 @@ if __name__ == "__main__":
                     programBag[ID](programBag[ID], environmentBag[ID])
             except:
                 if ID not in glitch: glitch.append(ID)
-        if simulation_architect.simulation_maintenance:
+        if sim_architect.simulation_maintenance:
             (programBag, environmentBag, architectCode, 
                 architectCodeMap, glitch) = SUMaintenance(programBag, 
                 environmentBag, architectCode, architectCodeMap, glitch)
-        delay = simulation_architect.loop_delay
+        delay = sim_architect.loop_delay
         time.sleep(delay)
         timecycle = timecycle + 1
     # -----------------------------------------------------------------
