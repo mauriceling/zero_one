@@ -23,6 +23,19 @@ delay = 0
 def SUReporter(program=None, environment=None, 
                programBag=programBag, 
                environmentBag=environmentBag):
+    """!
+    Super user function to reports the overall status of the simulation.
+
+    @param program: Function (program) to execute.
+    @type program: Callable
+    @param environment: Parameters for the program.
+    @type environment: Dictionary
+    @param programBag: All the functions (programs) in the simulation.
+    @type programBag: Dictionary
+    @param environmentBag: Parameters for all the functions (programs) 
+    in the simulation.
+    @returns: environment
+    """
     print("Timecycle = %i" % timecycle)
     print("Program Bag = %s" % programBag)
     print("Environment Bag = %s" % environmentBag)
@@ -35,6 +48,19 @@ def SUReporter(program=None, environment=None,
 def SUProgramAdder(program=None, environment=None, 
                    programBag=programBag, 
                    environmentBag=environmentBag):
+    """!
+    Super user function to add a function (program) into the simulation.
+
+    @param program: Function (program) to execute.
+    @type program: Callable
+    @param environment: Parameters for the program.
+    @type environment: Dictionary
+    @param programBag: All the functions (programs) in the simulation.
+    @type programBag: Dictionary
+    @param environmentBag: Parameters for all the functions (programs) 
+    in the simulation.
+    @returns: environment
+    """
     try: newProgramID = max(programBag.keys()) + 1
     except ValueError: newProgramID = 1
     programBag[newProgramID] = program
@@ -45,6 +71,20 @@ def SUProgramAdder(program=None, environment=None,
 def SUArchitect(program=None, environment=None, 
                 programBag=programBag, 
                 environmentBag=environmentBag):
+    """!
+    Super user function to add privileged (architect) functions 
+    (program) the simulation.
+
+    @param program: Function (program) to execute.
+    @type program: Callable
+    @param environment: Parameters for the program.
+    @type environment: Dictionary
+    @param programBag: All the functions (programs) in the simulation.
+    @type programBag: Dictionary
+    @param environmentBag: Parameters for all the functions (programs) 
+    in the simulation.
+    @returns: environment
+    """
     importlib.reload(simulation_architect)
     for ID in [ID for ID in simulation_architect.archCode.keys() 
                if ID not in architectCode]:
@@ -59,6 +99,21 @@ def SUMaintenance(programBag=programBag,
                   architectCode=architectCode,
                   architectCodeMap=architectCodeMap,
                   glitch=glitch):
+    """!
+    Super user function activate interactive maintainence functions of 
+    the simulation.
+
+    @param program: Function (program) to execute.
+    @type program: Callable
+    @param environment: Parameters for the program.
+    @type environment: Dictionary
+    @param programBag: All the functions (programs) in the simulation.
+    @type programBag: Dictionary
+    @param environmentBag: Parameters for all the functions (programs) 
+    in the simulation.
+    @returns: (programBag, environmentBag, architectCode, 
+    architectCodeMap, glitch)
+    """
     importlib.reload(simulation_maintenance)
     return simulation_maintenance.main(programBag, 
                                        environmentBag,
@@ -69,6 +124,9 @@ def SUMaintenance(programBag=programBag,
 SUProgramAdder(SUArchitect, None)
 SUProgramAdder(SUReporter, None)
 
+# -----------------------------------------------------------------
+# Simulator code
+# -----------------------------------------------------------------
 timecycle = 1
 while True:
     programIDs = list(programBag.keys())
@@ -89,3 +147,6 @@ while True:
     delay = simulation_architect.loop_delay
     time.sleep(delay)
     timecycle = timecycle + 1
+# -----------------------------------------------------------------
+# End of Simulator code
+# -----------------------------------------------------------------
