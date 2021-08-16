@@ -4,3 +4,6 @@ One day while working with [DOSE](https://github.com/mauriceling/dose) simulatio
 
 ## Videos
 1. [ZeroOne 1 - Starting "Matrix" Simulator Project](https://youtu.be/4tf9dWxqXiQ)
+
+## License
+ZeroOne is licensed under the GNU General Public License, Version 3.0 (the "License") for academic and not-for-profit use only; commercial and/or for profit use(s) is/are not licensed under the License and requires a separate commercial license from the copyright owner (Maurice Ling); you may not use this file except in compliance with the License.
