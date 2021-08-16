@@ -25,7 +25,7 @@ architectE = {'identity': 'architect',
 def oracle(program, environment):
     return environment
 oracleE = {'identity': 'oracle',
-              'passcode': 'ilovefood'}
+           'passcode': 'ilovefood'}
 
 archCode = \
 {0: architect,

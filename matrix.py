@@ -12,17 +12,14 @@ import simulation_maintenance
 
 environmentBag = {}
 programBag = {}
-
 architectCode = []
 architectCodeMap = {}
-
 glitch = []
 
 delay = 0
 
-def SUReporter(program=None, environment=None, 
-               programBag=programBag, 
-               environmentBag=environmentBag):
+def SUReporter(program, environment, programBag=programBag, 
+    environmentBag=environmentBag):
     """!
     Super user function to reports the overall status of the simulation.
 
@@ -45,9 +42,8 @@ def SUReporter(program=None, environment=None,
     print("")
     return environment
 
-def SUProgramAdder(program=None, environment=None, 
-                   programBag=programBag, 
-                   environmentBag=environmentBag):
+def SUProgramAdder(program, environment, programBag=programBag, 
+    environmentBag=environmentBag):
     """!
     Super user function to add a function (program) into the simulation.
 
@@ -68,9 +64,8 @@ def SUProgramAdder(program=None, environment=None,
     environment = {'newProgramID': newProgramID}
     return environment
     
-def SUArchitect(program=None, environment=None, 
-                programBag=programBag, 
-                environmentBag=environmentBag):
+def SUArchitect(program, environment, programBag=programBag, 
+    environmentBag=environmentBag):
     """!
     Super user function to add privileged (architect) functions 
     (program) the simulation.
@@ -94,11 +89,8 @@ def SUArchitect(program=None, environment=None,
         architectCodeMap[ID] = environment['newProgramID']
     return environment   
 
-def SUMaintenance(programBag=programBag, 
-                  environmentBag=environmentBag,
-                  architectCode=architectCode,
-                  architectCodeMap=architectCodeMap,
-                  glitch=glitch):
+def SUMaintenance(programBag, environmentBag, architectCode,
+    architectCodeMap, glitch):
     """!
     Super user function activate interactive maintainence functions of 
     the simulation.
@@ -115,11 +107,8 @@ def SUMaintenance(programBag=programBag,
     architectCodeMap, glitch)
     """
     importlib.reload(simulation_maintenance)
-    return simulation_maintenance.main(programBag, 
-                                       environmentBag,
-                                       architectCode,
-                                       architectCodeMap,
-                                       glitch)
+    return simulation_maintenance.main(programBag, environmentBag,
+        architectCode, architectCodeMap, glitch)
 
 SUProgramAdder(SUArchitect, None)
 SUProgramAdder(SUReporter, None)
@@ -134,16 +123,12 @@ while True:
         try:
             environmentBag[ID] = \
                 programBag[ID](programBag[ID], environmentBag[ID])
-        except KeyError:
+        except:
             if ID not in glitch: glitch.append(ID)
     if simulation_architect.simulation_maintenance:
-        newEnv = SUMaintenance(programBag, environmentBag,
-                architectCode, architectCodeMap, glitch)
-        programBag = newEnv[0] 
-        environmentBag = newEnv[1]
-        architectCode = newEnv[2]
-        architectCodeMap = newEnv[3]
-        glitch = newEnv[4]
+        (programBag, environmentBag, architectCode, 
+            architectCodeMap, glitch) = SUMaintenance(programBag, 
+            environmentBag, architectCode, architectCodeMap, glitch)
     delay = simulation_architect.loop_delay
     time.sleep(delay)
     timecycle = timecycle + 1
